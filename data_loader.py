@@ -20,6 +20,7 @@ def load_and_clean():
 
 	print(tech_reviews.shape)
 	print(food_reviews.shape)
+	return tech_reviews, food_reviews
 
 if __name__ == '__main__':
-	load_and_clean()
+	tech_reviews, food_reviews = load_and_clean()
