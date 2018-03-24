@@ -25,13 +25,17 @@ def load_and_clean():
 	print(food_reviews.shape)
 	return tech_reviews, food_reviews
 
-def text_preprocessing(tech_reviews, food_reviews):
+def preprocessing(tech_reviews, food_reviews):
 	# import nltk
 	# nltk.download('punkt') # download punkt if not available
 	tech_reviews['tokenized_text'] = tech_reviews['text'].apply(word_tokenize)
 	food_reviews['tokenized_text'] = food_reviews['text'].apply(word_tokenize)
+	# remove stop words
+	# remove punctuations...?
+	# word2vec/glove (both)
+	
 	print(food_reviews['tokenized_text'][2302])
 
 if __name__ == '__main__':
 	tech_reviews, food_reviews = load_and_clean()
-	text_preprocessing(tech_reviews, food_reviews)
+	preprocessing(tech_reviews, food_reviews)
