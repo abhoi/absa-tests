@@ -17,7 +17,7 @@ DATA2_TRAIN_PATH = 'data/data_2_train.csv'
 
 # GLoVe pre-trained word vectors
 EMBEDDING_DIR = 'embeddings/'
-EMBEDDING_TYPE = 'glove.840B.300d.txt' # glove.840B.300d.txt
+EMBEDDING_TYPE = 'glove.840B.300d.txt' # glove.6B.300d.txt
 
 MAX_NB_WORDS = 95000
 
