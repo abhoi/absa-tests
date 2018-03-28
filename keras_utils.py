@@ -17,7 +17,7 @@ DATA2_TRAIN_PATH = 'data/data_2_train.csv'
 
 # GLoVe pre-trained word vectors
 EMBEDDING_DIR = 'embeddings/'
-EMBEDDING_TYPE = 'glove.840B.300d.txt' # glove.6B.300d.txt
+EMBEDDING_TYPE = 'glove.6B.300d.txt' # glove.6B.300d.txt
 
 MAX_NB_WORDS = 95000
 
@@ -53,16 +53,15 @@ def load_embedding_matrix(tech_reviews):
 	# pad sequences
 	tech_reviews['padded_text'] = tech_reviews['encoded_text'].apply(pad_sequences)
 	
-	print('Encoding and padding done...')
-	
 	# check if GLoVe embeddings exist
 	if not os.path.exists(EMBEDDING_DIR):
-		print('GloVe embedding does not exist')
+		print('GloVe embedding does not exist...exiting.')
 		sys.exit(1)
 	else:
-		print('GLoVE embedding found')
+		print(EMBEDDING_TYPE + ' embeddings found!')
 		e = open(EMBEDDING_DIR+EMBEDDING_TYPE)
 
+	print('Reading GLoVe embeddings...')
 	# read GLoVe embedding matrix
 	for line in e:
 		values = line.split()
@@ -79,14 +78,15 @@ def load_embedding_matrix(tech_reviews):
 		print('%d words could not be added.' % (len(error_words)))
 		print('Words are: \n', error_words)
 
+	print('Creating weight matrices...')
 	# create weight matrix for words in text
-	embedding_matrix = zeros((MAX_NB_WORDS, 100))
+	embedding_matrix = np.zeros((MAX_NB_WORDS, 300))
 	for word, i in t.word_index.items():
 		embedding_vector = embeddings_index.get(word)
 		if embedding_vector is not None:
 			embedding_matrix[i] = embedding_vector
 
-	print(embedding_matrix.shape)
+	print(embedding_matrix[1])
 
 if __name__ == '__main__':
 	tech_reviews, food_reviews = load_and_clean()
