@@ -88,6 +88,8 @@ def load_embedding_matrix(tech_reviews):
 
 	print(embedding_matrix[1])
 
+# get aspect embeddings {comparison with original text}, then train the embedding matrix using Embedding layer, then concatenate the aspect embeddings to sentence embeddings, then train the LSTM-RNN and 1DCNN
+	
 if __name__ == '__main__':
 	tech_reviews, food_reviews = load_and_clean()
 	load_embedding_matrix(tech_reviews)
