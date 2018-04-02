@@ -103,7 +103,8 @@ def fit_tokenizer(tech_reviews):
 	print('Found %s unique tokens' % len(word_index))
 	return t, word_index, VOCAB_SIZE
 
-def sub_list_finder(sentence, aspect):
+def sub_list_finder(sentence, aspect, aspect_dict):
+	# implement dictionary implementation of sub_list_finder with aspect_dict
 	global ASPECT_INDEX
 	sentence_length = len(sentence)
 	aspect_sequence = np.zeros(shape=(sentence_length))
@@ -117,7 +118,13 @@ def sub_list_finder(sentence, aspect):
 	return aspect_sequence
 
 def get_aspect_sequences(word_sequence, aspects):
-	aspect_sequence = np.array(map(lambda x, y: sub_list_finder(x, y), word_sequence, aspects)) # create aspect sequences based on word_sequence and aspects
+	aspect_dict = {}
+	key_index = 1
+	for i in aspects:
+		if ' '.join(i) not in aspect_dict:
+			aspect_dict[' '.join(i)] = key_index
+			key_index += 1
+	aspect_sequence = np.array(map(lambda x, y, z: sub_list_finder(x, y, z), word_sequence, aspects, aspect_dict)) # create aspect sequences based on word_sequence and aspects
 	return aspect_sequence
 
 def load_embedding_matrix(dataset):
