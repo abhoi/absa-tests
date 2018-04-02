@@ -1,2 +1,8 @@
 # .txt
 *.txt
+
+# .csv
+*.csv
+
+# .p
+*.p
