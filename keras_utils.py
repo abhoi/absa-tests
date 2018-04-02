@@ -146,9 +146,10 @@ def load_embedding_matrix(dataset):
 
 	print('Embedding layer set...')
 
+# get aspect embeddings {comparison with original text}, then train the embedding matrix using Embedding layer, then concatenate the aspect embeddings to sentence embeddings, then train the LSTM-RNN and 1DCNN
+	
 if __name__ == '__main__':
 	tech_reviews, food_reviews = load_and_clean()
 	load_embedding_matrix(tech_reviews)
-
 	# aspect term, train weights, unique IDs, concat layer
 	# mark-zero
