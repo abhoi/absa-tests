@@ -7,7 +7,10 @@ import pickle
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.text import text_to_word_sequence
 from keras.preprocessing.sequence import pad_sequences
-from keras.layers import Embedding
+from keras.layers import Embedding, Flatten, Dense
+from keras.models import Sequential
+from keras.utils.np_utils import to_categorical
+from keras.layers import GlobalAveragePooling1D
 
 # train data path
 DATA1_TRAIN_PATH = '../data/data_1_train.csv'
@@ -118,16 +121,21 @@ def get_aspect_sequences(word_sequence, aspects):
 	return aspect_sequence
 
 def load_embedding_matrix(dataset):
-	embeddings_index, error_words = read_GLoVe_embeddings()
+	# embeddings_index, error_words = read_GLoVe_embeddings()
 	t, word_index, VOCAB_SIZE = fit_tokenizer(dataset)
 
 	aspects = np.array(dataset['aspect_term'])
 	text = np.array(dataset['text'])
+	labels = np.array(dataset['class'])
 	sequences = t.texts_to_sequences(text) # text to sequence (encoded text)
 	word_sequence = np.array(map(lambda x: text_to_word_sequence(x), text)) # text to word sequence
 	aspects = np.array(map(lambda x: text_to_word_sequence(x), aspects)) # aspects to word sequence
 	padded_sequences = pad_sequences(sequences, maxlen=MAX_SEQ_LENGTH, dtype='int32', padding='post') # sequence to padded sequence
 	aspect_sequences = get_aspect_sequences(word_sequence, aspects)
+	aspect_sequences = pad_sequences(aspect_sequences, maxlen=MAX_SEQ_LENGTH, dtype='int32', padding='post')
+
+	train_aspect_embeddings(aspect_sequences, labels)
+	exit(1)
 
 	print('Creating weight matrices...')
 	# create weight matrix for words in text
@@ -142,9 +150,26 @@ def load_embedding_matrix(dataset):
 
 	# load pre-trained word embeddings into an Embedding layer
 	embedding_layer = Embedding(MAX_NB_WORDS, EMBEDDING_DIM, weights=[embedding_matrix], input_length=MAX_SEQ_LENGTH, trainable=False)
-	embedding_layer_aspects = Embedding(MAX_NB_WORDS, 50, input_length=50, trainable=True, mask_zero=True)
+	# embedding_layer_aspects = Embedding(MAX_NB_WORDS, 50, input_length=50, trainable=True, mask_zero=True)
 
 	print('Embedding layer set...')
+
+def train_aspect_embeddings(aspect_sequences, labels):
+	categorical_labels = to_categorical(labels, num_classes=None)
+
+	model = Sequential()
+	# model.add(Embedding(input_dim=aspect_sequences.shape[0], output_dim=300, input_length=aspect_sequences.shape[1]))
+	print(aspect_sequences.shape)
+	model.add(Embedding(input_dim=aspect_sequences.shape[0]+1, output_dim=300, input_length=50))
+	# model.add(Flatten())
+	model.add(GlobalAveragePooling1D())
+	model.add(Dense(2, activation='sigmoid'))
+	model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['acc'])
+	print(model.summary())
+	model.fit(aspect_sequences, categorical_labels, epochs=50, verbose=1)
+	loss, accuracy = model.evaluate(aspect_sequences, categorical_labels, verbose=0)
+	print('Accuracy: %0.3f' % accuracy)
+	# PUT ASPECT TERM: UNIQUE ID, REPLACE ASPECT SEQUENCE IDs with this UNIQUE ID
 
 # get aspect embeddings {comparison with original text}, then train the embedding matrix using Embedding layer, then concatenate the aspect embeddings to sentence embeddings, then train the LSTM-RNN and 1DCNN
 	
