@@ -10,17 +10,17 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.layers import Embedding
 
 # train data path
-DATA1_TRAIN_PATH = 'data/data_1_train.csv'
-DATA2_TRAIN_PATH = 'data/data_2_train.csv'
+DATA1_TRAIN_PATH = '../data/data_1_train.csv'
+DATA2_TRAIN_PATH = '../data/data_2_train.csv'
 
 # GLoVe pre-trained word vectors path
-EMBEDDING_DIR = 'embeddings/'
+EMBEDDING_DIR = '../embeddings/'
 EMBEDDING_TYPE = 'glove.6B.300d.txt' # glove.6B.300d.txt
 EMBEDDING_PICKLE_DIR = 'embeddings_index.p'
 EMBEDDING_ERROR_DIR = 'embeddings_error.p'
 
 # tokenizer path
-TOKENIZER_DIR = 'embeddings/tokenizer.p'
+TOKENIZER_DIR = '../embeddings/tokenizer.p'
 
 MAX_SEQ_LENGTH = 50
 MAX_NB_WORDS = 20000
