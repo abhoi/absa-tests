@@ -21,6 +21,7 @@ EMBEDDING_DIR = '../embeddings/'
 EMBEDDING_TYPE = 'glove.6B.300d.txt' # glove.6B.300d.txt
 EMBEDDING_PICKLE_DIR = 'embeddings_index.p'
 EMBEDDING_ERROR_DIR = 'embeddings_error.p'
+ASPECT_EMBEDDING_DIR = 'aspect_embeddings.p'
 
 # tokenizer path
 TOKENIZER_DIR = '../embeddings/tokenizer.p'
@@ -28,7 +29,9 @@ TOKENIZER_DIR = '../embeddings/tokenizer.p'
 MAX_SEQ_LENGTH = 50
 MAX_NB_WORDS = 20000
 EMBEDDING_DIM = 300
-ASPECT_INDEX = 1
+
+# aspect dictionary
+aspect_dict = {}
 
 def load_and_clean():
 	# read into pandas csv
@@ -103,32 +106,32 @@ def fit_tokenizer(tech_reviews):
 	print('Found %s unique tokens' % len(word_index))
 	return t, word_index, VOCAB_SIZE
 
-def sub_list_finder(sentence, aspect, aspect_dict):
+def sub_list_finder(sentence, aspect):
 	# implement dictionary implementation of sub_list_finder with aspect_dict
-	global ASPECT_INDEX
+	global aspect_dict
 	sentence_length = len(sentence)
 	aspect_sequence = np.zeros(shape=(sentence_length))
 	for i in range(sentence_length):
 		if aspect[0] == sentence[i]:
 			sub_list = sentence[i:i+len(aspect)]
 			if aspect == sub_list:
+				aspect_index = aspect_dict.get(' '.join(aspect))
 				for j in range(len(aspect)):
-					aspect_sequence[i+j] = ASPECT_INDEX
-	ASPECT_INDEX += 1
+					aspect_sequence[i+j] = aspect_index
 	return aspect_sequence
 
 def get_aspect_sequences(word_sequence, aspects):
-	aspect_dict = {}
 	key_index = 1
+	global aspect_dict
 	for i in aspects:
 		if ' '.join(i) not in aspect_dict:
 			aspect_dict[' '.join(i)] = key_index
 			key_index += 1
-	aspect_sequence = np.array(map(lambda x, y, z: sub_list_finder(x, y, z), word_sequence, aspects, aspect_dict)) # create aspect sequences based on word_sequence and aspects
+	aspect_sequence = np.array(map(lambda x, y: sub_list_finder(x, y), word_sequence, aspects)) # create aspect sequences based on word_sequence and aspects
 	return aspect_sequence
 
 def load_embedding_matrix(dataset):
-	# embeddings_index, error_words = read_GLoVe_embeddings()
+	embeddings_index, error_words = read_GLoVe_embeddings()
 	t, word_index, VOCAB_SIZE = fit_tokenizer(dataset)
 
 	aspects = np.array(dataset['aspect_term'])
@@ -140,9 +143,6 @@ def load_embedding_matrix(dataset):
 	padded_sequences = pad_sequences(sequences, maxlen=MAX_SEQ_LENGTH, dtype='int32', padding='post') # sequence to padded sequence
 	aspect_sequences = get_aspect_sequences(word_sequence, aspects)
 	aspect_sequences = pad_sequences(aspect_sequences, maxlen=MAX_SEQ_LENGTH, dtype='int32', padding='post')
-
-	train_aspect_embeddings(aspect_sequences, labels)
-	exit(1)
 
 	print('Creating weight matrices...')
 	# create weight matrix for words in text
@@ -156,10 +156,11 @@ def load_embedding_matrix(dataset):
 	print(embedding_matrix.shape)
 
 	# load pre-trained word embeddings into an Embedding layer
-	embedding_layer = Embedding(MAX_NB_WORDS, EMBEDDING_DIM, weights=[embedding_matrix], input_length=MAX_SEQ_LENGTH, trainable=False)
-	# embedding_layer_aspects = Embedding(MAX_NB_WORDS, 50, input_length=50, trainable=True, mask_zero=True)
-
+	# embedding_layer = Embedding(MAX_NB_WORDS, EMBEDDING_DIM, weights=[embedding_matrix], input_length=MAX_SEQ_LENGTH, trainable=False)
+	# embedding_layer_aspects = Embedding(MAX_NB_WORDS, 50, input_length=50, mask_zero=True, trainable=True)
+	train_aspect_embeddings(aspect_sequences, labels)
 	print('Embedding layer set...')
+	return embedding_matrix, aspect_sequences, padded_sequences, labels
 
 def train_aspect_embeddings(aspect_sequences, labels):
 	categorical_labels = to_categorical(labels, num_classes=None)
@@ -167,21 +168,21 @@ def train_aspect_embeddings(aspect_sequences, labels):
 	model = Sequential()
 	# model.add(Embedding(input_dim=aspect_sequences.shape[0], output_dim=300, input_length=aspect_sequences.shape[1]))
 	print(aspect_sequences.shape)
-	model.add(Embedding(input_dim=aspect_sequences.shape[0]+1, output_dim=300, input_length=50))
+	model.add(Embedding(input_dim=aspect_sequences.shape[0]+1, output_dim=300, input_length=50, trainable=True))
 	# model.add(Flatten())
 	model.add(GlobalAveragePooling1D())
 	model.add(Dense(2, activation='sigmoid'))
 	model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['acc'])
 	print(model.summary())
-	model.fit(aspect_sequences, categorical_labels, epochs=50, verbose=1)
+	model.fit(aspect_sequences, categorical_labels, epochs=25, verbose=1, validation_split=0.2)
 	loss, accuracy = model.evaluate(aspect_sequences, categorical_labels, verbose=0)
 	print('Accuracy: %0.3f' % accuracy)
-	# PUT ASPECT TERM: UNIQUE ID, REPLACE ASPECT SEQUENCE IDs with this UNIQUE ID
 
 # get aspect embeddings {comparison with original text}, then train the embedding matrix using Embedding layer, then concatenate the aspect embeddings to sentence embeddings, then train the LSTM-RNN and 1DCNN
 	
 if __name__ == '__main__':
+	main()
 	tech_reviews, food_reviews = load_and_clean()
-	load_embedding_matrix(tech_reviews)
+	embedding_matrix, aspect_sequences, padded_sequences, labels = load_embedding_matrix(tech_reviews)
 	# aspect term, train weights, unique IDs, concat layer
 	# mark-zero
