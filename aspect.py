@@ -536,11 +536,11 @@ def model_3():
     	print(model.summary())
     	history = model.fit(sentence_train, y_train, epochs=5, verbose=1, validation_data=(sentence_test, y_test))
     	f.write('Fold %d' % (j+1))
-    	f.write(history.history['acc'])
-    	f.write(history.history['val_acc'])
-    	f.write(history.history['f1'])
-    	f.write(history.history['precision'])
-    	f.write(history.history['recall'])
+    	f.write(str(history.history['acc']))
+    	f.write(str(history.history['val_acc']))
+    	f.write(str(history.history['f1']))
+    	f.write(str(history.history['precision']))
+    	f.write(str(history.history['recall']))
    	f.close()
 
 if __name__ == '__main__':
