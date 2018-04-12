@@ -382,7 +382,7 @@ def output_shape(input_shape):
 def model_2():
     K.clear_session()
     tech_reviews, food_reviews = load_and_clean()
-    embedding_matrix, aspect_sequences, padded_sequences, labels = load_embedding_matrix(tech_reviews)
+    embedding_matrix, aspect_sequences, padded_sequences, labels = load_embedding_matrix(food_reviews)
     # labels = [x+1 for x in labels]
     print(itemfreq(labels))
 
@@ -505,7 +505,7 @@ def model_2_CV():
 def model_3():
     K.clear_session()
     tech_reviews, food_reviews = load_and_clean()
-    embedding_matrix, aspect_sequences, padded_sequences, labels = load_embedding_matrix(tech_reviews)
+    embedding_matrix, aspect_sequences, padded_sequences, labels = load_embedding_matrix(food_reviews)
     labels = np.array([x + 1 for x in labels])
     print(itemfreq(labels))
 
@@ -534,14 +534,13 @@ def model_3():
     	model = Model(inputs=sentence_ip, outputs=x)
     	model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['acc', f1, precision, recall])
     	print(model.summary())
-    	history = model.fit(sentence_train, y_train, epochs=5, verbose=1, validation_data=(sentence_test, y_test))
-    	f.write('Fold %d' % (j+1))
+    	history = model.fit(sentence_train, y_train, epochs=10, verbose=1, validation_data=(sentence_test, y_test))
+    	f.write('Fold %d\n' % (j+1))
     	f.write(str(history.history['acc']))
     	f.write(str(history.history['val_acc']))
     	f.write(str(history.history['f1']))
     	f.write(str(history.history['precision']))
     	f.write(str(history.history['recall']))
-   	f.close()
 
 if __name__ == '__main__':
     # model_2()
