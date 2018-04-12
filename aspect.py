@@ -511,6 +511,10 @@ def model_3():
 
     N_FOLDS = 10
     skf = StratifiedKFold(N_FOLDS, shuffle=True, random_state=1000)
+    val_acc_scores = []
+    f1_scores = []
+    precision_scores = []
+    recall_scores = []
     for j, (train_idx, test_idx) in enumerate(skf.split(padded_sequences, labels)):
     	print('Fold %d' % (j + 1))
         sentence_train, y_train = padded_sequences[train_idx], labels[train_idx]
@@ -529,7 +533,12 @@ def model_3():
     	model = Model(inputs=sentence_ip, outputs=x)
     	model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['acc', f1, precision, recall])
     	print(model.summary())
-    	model.fit(sentence_train, y_train, epochs=5, verbose=1, validation_data=(sentence_test, y_test))
+    	history = model.fit(sentence_train, y_train, epochs=5, verbose=1, validation_data=(sentence_test, y_test))
+    	print(history.history['acc'])
+    	print(history.history['val_acc'])
+    	print(history.history['f1'])
+    	print(history.history['precision'])
+    	print(history.history['recall'])
 
 if __name__ == '__main__':
     # model_2()
