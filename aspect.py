@@ -5,6 +5,8 @@ import os
 import pickle
 from scipy.stats import itemfreq
 from sklearn.model_selection import StratifiedKFold
+from keras.callbacks import Callback
+from sklearn.metrics import confusion_matrix, f1_score, precision_score, recall_score
 
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.text import text_to_word_sequence
@@ -16,6 +18,47 @@ from keras.layers import add, multiply, LSTM, Bidirectional, BatchNormalization,
 from keras.models import Model
 from keras import backend as K
 
+def f1(y_true, y_pred):
+    def recall(y_true, y_pred):
+        """Recall metric.
+
+        Only computes a batch-wise average of recall.
+
+        Computes the recall, a metric for multi-label classification of
+        how many relevant items are selected.
+        """
+        true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+        possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
+        recall = true_positives / (possible_positives + K.epsilon())
+        return recall
+
+    def precision(y_true, y_pred):
+        """Precision metric.
+
+        Only computes a batch-wise average of precision.
+
+        Computes the precision, a metric for multi-label classification of
+        how many selected items are relevant.
+        """
+        true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+        predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
+        precision = true_positives / (predicted_positives + K.epsilon())
+        return precision
+    precision = precision(y_true, y_pred)
+    recall = recall(y_true, y_pred)
+    return 2*((precision*recall)/(precision+recall+K.epsilon()))
+
+def precision(y_true, y_pred):
+	true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+	predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
+	precision = true_positives / (predicted_positives + K.epsilon())
+	return precision
+
+def recall(y_true, y_pred):
+	true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+	possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
+	recall = true_positives / (possible_positives + K.epsilon())
+	return recall
 
 class MaskedGlobalAveragePooling1D(GlobalAveragePooling1D):
 
@@ -459,7 +502,35 @@ def model_2_CV():
 
     print("Average fbeta score : ", sum(fbeta_scores) / len(fbeta_scores))
 
+def model_3():
+    K.clear_session()
+    tech_reviews, food_reviews = load_and_clean()
+    embedding_matrix, aspect_sequences, padded_sequences, labels = load_embedding_matrix(tech_reviews)
+    labels = np.array([x + 1 for x in labels])
+    print(itemfreq(labels))
+
+    N_FOLDS = 10
+    skf = StratifiedKFold(N_FOLDS, shuffle=True, random_state=1000)
+    for j, (train_idx, test_idx) in enumerate(skf.split(padded_sequences, labels)):
+    	print('Fold %d' % (j + 1))
+        sentence_train, y_train = padded_sequences[train_idx], labels[train_idx]
+        sentence_test, y_test = padded_sequences[test_idx], labels[test_idx]
+
+        y_train = to_categorical(y_train, 3)
+        y_test = to_categorical(y_test, 3)
+
+    	sentence_embedding = Embedding(MAX_NUM_WORDS, output_dim=EMBEDDING_DIM, mask_zero=MASK_ZEROS,
+    		weights=EMBEDDING_WEIGHTS, trainable=False)
+    	# labels = to_categorical(labels, 3)
+    	sentence_ip = Input(shape=(MAX_SENTENCE_LENGTH,), dtype='int32')
+    	sentence_embedding = sentence_embedding(sentence_ip)  # Note: these are two different embeddings
+    	x = LSTM(256, dropout=0.2, recurrent_dropout=0.2)(sentence_embedding)
+    	x = Dense(3, activation='softmax')(x)
+    	model = Model(inputs=sentence_ip, outputs=x)
+    	model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['acc', f1, precision, recall])
+    	print(model.summary())
+    	model.fit(sentence_train, y_train, epochs=5, verbose=1, validation_data=(sentence_test, y_test))
 
 if __name__ == '__main__':
     # model_2()
-    model_2_CV()
+    model_3()
