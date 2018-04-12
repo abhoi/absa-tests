@@ -515,6 +515,7 @@ def model_3():
     f1_scores = []
     precision_scores = []
     recall_scores = []
+    f = open('history.txt', 'w+')
     for j, (train_idx, test_idx) in enumerate(skf.split(padded_sequences, labels)):
     	print('Fold %d' % (j + 1))
         sentence_train, y_train = padded_sequences[train_idx], labels[train_idx]
@@ -534,11 +535,13 @@ def model_3():
     	model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['acc', f1, precision, recall])
     	print(model.summary())
     	history = model.fit(sentence_train, y_train, epochs=5, verbose=1, validation_data=(sentence_test, y_test))
-    	print(history.history['acc'])
-    	print(history.history['val_acc'])
-    	print(history.history['f1'])
-    	print(history.history['precision'])
-    	print(history.history['recall'])
+    	f.write('Fold %d' % (j+1))
+    	f.write(history.history['acc'])
+    	f.write(history.history['val_acc'])
+    	f.write(history.history['f1'])
+    	f.write(history.history['precision'])
+    	f.write(history.history['recall'])
+   	f.close()
 
 if __name__ == '__main__':
     # model_2()
