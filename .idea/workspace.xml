@@ -2,12 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="93624f3d-ebee-408b-acd6-0b636fb6dde7" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/absa.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/absa.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/abhoi/aspect.py" beforeDir="false" afterPath="$PROJECT_DIR$/abhoi/aspect.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/abhoi/utils/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/abhoi/utils/keras_utils.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/abhoi/utils/mask_util.py" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/abhoi/td-lstm.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/abhoi/aspect-test.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/abhoi/aspect.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/abhoi/keras_utils/keras_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/abhoi/keras_utils/keras_utils.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -17,24 +15,25 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/absa$aspect__1_.coverage" NAME="aspect (1) Coverage Results" MODIFIED="1523577734402" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/abhoi" />
+    <SUITE FILE_PATH="coverage/absa$aspect_test.coverage" NAME="aspect-test Coverage Results" MODIFIED="1523578496607" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/abhoi" />
+    <SUITE FILE_PATH="coverage/absa$aspect__1_.coverage" NAME="aspect (1) Coverage Results" MODIFIED="1523577937396" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/abhoi" />
     <SUITE FILE_PATH="coverage/absa$aspect.coverage" NAME="aspect Coverage Results" MODIFIED="1523472524739" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="aspect.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/abhoi/aspect.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="172">
-              <caret line="87" column="20" selection-start-line="87" selection-start-column="20" selection-end-line="87" selection-end-column="20" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
+      <file leaf-file-name="td-lstm.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/abhoi/td-lstm.py">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -44,6 +43,7 @@
       <find>MAX_SEQ_Le</find>
       <find>aspect</find>
       <find>Callback</find>
+      <find>main()</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -54,6 +54,9 @@
       <list>
         <option value="$PROJECT_DIR$/aspect.py" />
         <option value="$PROJECT_DIR$/abhoi/aspect.py" />
+        <option value="$PROJECT_DIR$/abhoi/aspect-test.py" />
+        <option value="$PROJECT_DIR$/abhoi/keras_utils/keras_utils.py" />
+        <option value="$PROJECT_DIR$/abhoi/td-lstm.py" />
       </list>
     </option>
   </component>
@@ -100,7 +103,7 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="settings.editor.selected.configurable" value="settings.github" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -114,7 +117,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.aspect (1)">
+  <component name="RunManager" selected="Python.aspect-test">
     <configuration name="aspect (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="absa" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -129,6 +132,25 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/abhoi/aspect.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="aspect-test" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="absa" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/abhoi" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/abhoi/aspect-test.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -156,9 +178,11 @@
     <list>
       <item itemvalue="Python.aspect" />
       <item itemvalue="Python.aspect (1)" />
+      <item itemvalue="Python.aspect-test" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.aspect-test" />
         <item itemvalue="Python.aspect (1)" />
         <item itemvalue="Python.aspect" />
       </list>
@@ -179,21 +203,20 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="39" y="22" width="1401" height="878" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.3290653" />
       <window_info anchor="bottom" id="Python Console" order="7" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.33802816" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.38924456" />
       <window_info anchor="bottom" id="Terminal" order="7" />
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.57253385" visible="true" weight="0.16703458" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.572327" visible="true" weight="0.16703458" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="right" id="SciView" order="3" />
-      <window_info id="Structure" order="1" sideWeight="0.42746615" side_tool="true" visible="true" weight="0.16703458" />
+      <window_info id="Structure" order="1" sideWeight="0.42767295" side_tool="true" visible="true" weight="0.16703458" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39948782" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -316,13 +339,30 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/abhoi/aspect.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="172">
-          <caret line="87" column="20" selection-start-line="87" selection-start-column="20" selection-end-line="87" selection-end-column="20" />
+        <state relative-caret-position="226">
+          <caret line="89" column="21" lean-forward="true" selection-start-line="89" selection-start-column="21" selection-end-line="89" selection-end-column="21" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/abhoi/keras_utils/keras_utils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-557">
+          <caret line="4" column="13" lean-forward="true" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/abhoi/aspect-test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="6" column="15" selection-start-line="6" selection-start-column="15" selection-end-line="6" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/abhoi/td-lstm.py">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
   </component>
 </project>
