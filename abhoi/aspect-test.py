@@ -81,11 +81,11 @@ class MaskableFlatten(Flatten):
 
 
 # train data path
-DATA1_TRAIN_PATH = '../data/data_1_train.csv'
-DATA2_TRAIN_PATH = '../data/data_2_train.csv'
+DATA1_TRAIN_PATH = 'data/data_1_train.csv'
+DATA2_TRAIN_PATH = 'data/data_2_train.csv'
 
 # GLoVe pre-trained word vectors path
-EMBEDDING_DIR = '../embeddings/'
+EMBEDDING_DIR = 'embeddings/'
 EMBEDDING_TYPE = 'glove.6B.300d.txt'  # glove.6B.300d.txt
 EMBEDDING_PICKLE_DIR = 'embeddings_index.p'
 EMBEDDING_ERROR_DIR = 'embeddings_error.p'
