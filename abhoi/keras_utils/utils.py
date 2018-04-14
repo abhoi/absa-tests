@@ -164,38 +164,10 @@ def load_embedding_matrix(dataset):
             embedding_matrix[i] = embedding_vector
 
     print(embedding_matrix.shape)
-
-    # load pre-trained word embeddings into an Embedding layer
-    # embedding_layer = Embedding(MAX_NB_WORDS, EMBEDDING_DIM, weights=[embedding_matrix], input_length=MAX_SEQ_LENGTH,
-    # trainable=False)
-    # embedding_layer_aspects = Embedding(MAX_NB_WORDS, 50, input_length=50, mask_zero=True, trainable=True)
-    train_aspect_embeddings(aspect_sequences, labels)
     print('Embedding layer set...')
     return embedding_matrix, aspect_sequences, padded_sequences, labels
 
 
-def train_aspect_embeddings(aspect_sequences, labels):
-    categorical_labels = to_categorical(labels, num_classes=None)
-
-    model = Sequential()
-    # model.add(Embedding(input_dim=aspect_sequences.shape[0], output_dim=300, input_length=aspect_sequences.shape[1]))
-    print(aspect_sequences.shape)
-    model.add(Embedding(input_dim=aspect_sequences.shape[0] + 1, output_dim=300, input_length=60, trainable=True))
-    # model.add(Flatten())
-    model.add(GlobalAveragePooling1D())
-    model.add(Dense(2, activation='sigmoid'))
-    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['acc'])
-    print(model.summary())
-    model.fit(aspect_sequences, categorical_labels, epochs=25, verbose=1, validation_split=0.2)
-    loss, accuracy = model.evaluate(aspect_sequences, categorical_labels, verbose=0)
-    print('Accuracy: %0.3f' % accuracy)
-
-
-# get aspect embeddings {comparison with original text}, then train the embedding matrix using Embedding layer,
-# then concatenate the aspect embeddings to sentence embeddings, then train the LSTM-RNN and 1DCNN
-
 if __name__ == '__main__':
     tech_reviews, food_reviews = load_and_clean()
     embedding_matrix, aspect_sequences, padded_sequences, labels = load_embedding_matrix(tech_reviews)
-# aspect term, train weights, unique IDs, concat layer
-# mark-zero

@@ -84,8 +84,8 @@ ASPECT_EMBEDDING_DIR = 'aspect_embeddings.p'
 # tokenizer path
 TOKENIZER_DIR = 'embeddings/tokenizer.p'
 
-MAX_SEQ_LENGTH = 50
-MAX_NB_WORDS = 20000
+MAX_SEQ_LENGTH = 60
+MAX_NB_WORDS = 95000
 EMBEDDING_DIM = 300
 
 # aspect dictionary
@@ -132,7 +132,7 @@ Benefits of this model
 
 NUM_CLASSES = 3  # 0 = neg, 1 = neutral, 2 = pos
 
-MAX_SENTENCE_LENGTH = 50
+MAX_SENTENCE_LENGTH = 60
 MAX_NUM_WORDS = 20000  # this will be number of unique "words" (n-grams etc) there are
 MAX_NUM_ASPECT_WORDS = 300  # this will be the number of unique aspect "words" (uni-grams only)
 
