@@ -43,3 +43,4 @@ class LSTM(object):
         self.datasets = load_and_clean()
         self.glove = load_embedding_matrix(self.datasets[0])
         self.word_embedding = tf.constant(self.glove, name='word_embedding')
+        # implement correct way of getting data and creating the bi-directional lstm
